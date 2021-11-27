@@ -118,7 +118,7 @@ func (sh *serverHandler) getZonePeers(c *gin.Context) {
 // runServer till context is done/cancelled
 func (sh *serverHandler) runServer(addr string, ctx context.Context) {
 	httpSrv := &http.Server{
-		Addr:    addr,
+		Addr:    ":" + addr,
 		Handler: sh.gin,
 	}
 	go func() {
