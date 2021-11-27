@@ -5,21 +5,25 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
+	"strings"
 	"time"
-
 )
 
 type RegisterRequest struct {
-	RegisterAt time.Time         `json:"register_at"`
-	Address    string            `json:"address"` // full Address `
-	Zone       int               `json:"zone"`    // todo
-	MetaData   MetaData `json:"meta_data"`
+	RegisterAt time.Time `json:"register_at"`
+	Address    string    `json:"address"` // full Address `
+	Zone       int       `json:"zone"`    // todo
+	MetaData   MetaData  `json:"meta_data"`
 }
 type PeerResponse []RegisterRequest
-func (pr *PeerResponse)GetPeerAddr() []string{
+
+func (pr *PeerResponse) GetPeerAddr(exclude string) []string {
 	var p []string
 	for _, p2 := range *pr {
 		p = append(p, p2.Address)
+		if exclude != "" && strings.Contains(exclude, p2.Address) {
+			continue
+		}
 	}
 	return p
 }
