@@ -2,6 +2,7 @@ package _package
 
 import (
 	"context"
+	"fmt"
 	"math/rand"
 	"strconv"
 	"sync"
@@ -11,10 +12,13 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-const testAddr = ":9999"
+const testAddr = "9999"
+
 const testUrl = "http://localhost"
-const tClientsPerZone = 3
-const tZones = 5
+
+//const deployedUrl = "https://bootstrap-registry.herokuapp.com"
+const tClientsPerZone = 5
+const tZones = 6
 
 var reg *registry
 var singleRegistry = sync.Once{}
@@ -52,10 +56,12 @@ func mockClientGetZones() []int{
 	return RegistryClient(testUrl + testAddr).GetZoneIds()
 }
 func mockClientGetZone(zone int) PeerResponse {
-	return RegistryClient(testUrl + testAddr).GetZonePeers(zone)
+	//return RegistryClient(deployedUrl).GetZonePeers(zone)
+	return RegistryClient(testUrl + ":" + testAddr).GetZonePeers(zone)
 }
 func mockClientRegister(zone int, address string, meta MetaData) PeerResponse {
-	return RegistryClient(testUrl+testAddr).Register(zone, address, meta)
+	//return RegistryClient(deployedUrl).Register(zone, address, meta)
+	return RegistryClient(testUrl+":"+testAddr).Register(zone, address, meta)
 }
 
 func TestRegistryClient(t *testing.T) {
@@ -113,6 +119,6 @@ func TestRegistryClient(t *testing.T) {
 		assert.Equal(t, tClientsPerZone, len(responses))
 	}
 
-	reg.allDetails()
+	fmt.Println(reg.allDetails())
 
 }

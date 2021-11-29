@@ -3,11 +3,11 @@ package main
 import (
 	"os"
 
-	"github.com/Ishan27gOrg/registry/package"
+	_package "github.com/Ishan27gOrg/registry/package"
 )
 
 func main() {
-	port := os.Getenv("BIND_ADDR")
+	port := os.Getenv("PORT")
 	if port == "" {
 		os.Exit(1)
 	}
