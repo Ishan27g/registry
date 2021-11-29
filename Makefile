@@ -1,5 +1,5 @@
 test:
-	go test --v
+	cd package && go test --v
 clean:
 	rm registry
 build:

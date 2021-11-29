@@ -3,7 +3,7 @@ package main
 import (
 	"os"
 
-	_package "github.com/Ishan27gOrg/registry/package"
+	p "github.com/Ishan27gOrg/registry/package"
 )
 
 func main() {
@@ -11,5 +11,5 @@ func main() {
 	if port == "" {
 		os.Exit(1)
 	}
-	_package.Server(port, _package.Setup())
+	p.Server(port, p.Setup())
 }

@@ -16,7 +16,7 @@ const testAddr = "9999"
 
 const testUrl = "http://localhost"
 
-//const deployedUrl = "https://bootstrap-registry.herokuapp.com"
+// const deployedUrl = "https://bootstrap-registry.herokuapp.com"
 const tClientsPerZone = 5
 const tZones = 6
 
@@ -53,10 +53,11 @@ func mockZone(zone int) testZone {
 	return nw
 }
 func mockClientGetZones() []int{
-	return RegistryClient(testUrl + testAddr).GetZoneIds()
+	// return RegistryClient(deployedUrl).GetZoneIds()
+	return RegistryClient(testUrl + ":" + testAddr).GetZoneIds()
 }
 func mockClientGetZone(zone int) PeerResponse {
-	//return RegistryClient(deployedUrl).GetZonePeers(zone)
+	// return RegistryClient(deployedUrl).GetZonePeers(zone)
 	return RegistryClient(testUrl + ":" + testAddr).GetZonePeers(zone)
 }
 func mockClientRegister(zone int, address string, meta MetaData) PeerResponse {

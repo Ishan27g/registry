@@ -9,7 +9,6 @@ require (
 	github.com/gin-gonic/gin v1.7.7 // indirect
 	github.com/hashicorp/go-hclog v1.0.0 // indirect
 	github.com/jedib0t/go-pretty/v6 v6.2.4 // indirect
-	github.com/stretchr/testify v1.7.0 // indirect
 )
 
 require (
