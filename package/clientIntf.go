@@ -2,6 +2,7 @@ package _package
 
 import (
 	"bytes"
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"strconv"
@@ -27,11 +28,29 @@ func (pr *PeerResponse)GetPeerAddr() []string{
 type RegistryClientI interface {
 	// Register self at this address/zone with registry
 	Register(zone int, address string, meta MetaData) PeerResponse
+	// GetZoneIds returns the zoneIds
+	GetZoneIds() []int
 	// GetZonePeers returns the addresses of zone peers
 	GetZonePeers(zone int) PeerResponse
 }
 type registryClient struct {
 	serverAddress string
+}
+
+func (r *registryClient) GetZoneIds() []int {
+	url := r.serverAddress + ZoneIdsUrl
+	req, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		return nil
+	}
+	var rsp map[string][]int
+	if b := sendReq(req); b != nil{
+		err := json.Unmarshal(b, &rsp)
+		if err != nil {
+			return nil
+		}
+	}
+	return rsp["zoneIds"]
 }
 
 func (r *registryClient) Register(zone int, address string, meta MetaData) PeerResponse {

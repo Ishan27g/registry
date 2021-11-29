@@ -1,4 +1,4 @@
-module github.com/Ishan27gOrg/registry/internal
+module github.com/Ishan27gOrg/registry/package
 
 go 1.17
 

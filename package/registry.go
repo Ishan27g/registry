@@ -65,6 +65,15 @@ func (r *registry) addPeer(p peer) bool {
 	}
 	return added
 }
+func (r *registry) zoneIds() []int {
+	r.lock.Lock()
+	defer r.lock.Unlock()
+	var zoneIds []int
+	for _, i2 := range r.zones.Keys() {
+		zoneIds = append(zoneIds, i2.(int))
+	}
+	return zoneIds
+}
 func (r *registry) allDetails() string {
 	r.lock.Lock()
 	defer r.lock.Unlock()

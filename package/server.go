@@ -16,6 +16,7 @@ import (
 
 const (
 	RegUrl      = "/register"
+	ZoneIdsUrl  = "/zones"
 	ZoneUrl     = "/zone"
 	DetailsUrl  = "/details"
 	ShutdownUrl = "/shutdown"
@@ -146,9 +147,13 @@ func (sh *serverHandler) details(c *gin.Context) {
 	c.String(http.StatusOK, sh.reg.allDetails())
 }
 
-// config http Server and handlers
+func (sh *serverHandler) getZones(c *gin.Context) {
+	c.JSON(http.StatusOK, &gin.H{ "zoneIds" : sh.reg.zoneIds()})
+}
+
+// Server configures the http Server and handlers
 func Server(addr string, reg *registry) {
-	gin.SetMode(gin.ReleaseMode)
+	gin.SetMode(gin.DebugMode)
 
 	sh := serverHandler{
 		stop:   nil,
@@ -161,8 +166,11 @@ func Server(addr string, reg *registry) {
 
 	// get full details
 	sh.gin.Handle("GET", DetailsUrl, sh.details)
+	// get list of zone id
+	sh.gin.Handle("GET", ZoneIdsUrl, sh.getZones)
 	// shutdown registry
 	sh.gin.Handle("GET", ShutdownUrl, sh.shutdown)
+
 	// get list of peers for a zone
 	sh.gin.Handle("GET", ZoneUrl, sh.getZonePeers)
 	// add a peer to a zone, return list of peers for that zone

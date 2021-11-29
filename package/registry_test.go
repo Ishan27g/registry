@@ -48,6 +48,9 @@ func mockZone(zone int) testZone {
 	}
 	return nw
 }
+func mockClientGetZones() []int{
+	return RegistryClient(testUrl + testAddr).GetZoneIds()
+}
 func mockClientGetZone(zone int) PeerResponse {
 	return RegistryClient(testUrl + testAddr).GetZonePeers(zone)
 }
@@ -56,6 +59,7 @@ func mockClientRegister(zone int, address string, meta MetaData) PeerResponse {
 }
 
 func TestRegistryClient(t *testing.T) {
+
 	mockRegistry()
 	rand.Seed(time.Now().Unix())
 
@@ -86,6 +90,9 @@ func TestRegistryClient(t *testing.T) {
 
 	wg2 := sync.WaitGroup{}
 	check := make(map[int]PeerResponse)
+
+	assert.Equal(t, len(mockClientGetZones()), tZones)
+
 	for i, zone := range testNetwork {
 		for _, p := range zone {
 			check[i] = mockClientGetZone(p.Zone)
