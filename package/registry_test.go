@@ -19,6 +19,7 @@ const testUrl = "http://localhost"
 // const deployedUrl = "https://bootstrap-registry.herokuapp.com"
 const tClientsPerZone = 5
 const tZones = 6
+const MockHostName = "http://localhost:"
 
 var reg *registry
 var singleRegistry = sync.Once{}
@@ -47,12 +48,12 @@ func mockZone(zone int) testZone {
 	nw := make(map[string]peer)
 	for i := 0; i < tClientsPerZone; i++ {
 		port := (zone * 10) + 9000 + i
-		addr := "http://service:" + strconv.Itoa(port)
+		addr := MockHostName + strconv.Itoa(port)
 		nw[addr] = newPeer(addr, zone, nil)
 	}
 	return nw
 }
-func mockClientGetZones() []int{
+func mockClientGetZones() []int {
 	// return RegistryClient(deployedUrl).GetZoneIds()
 	return RegistryClient(testUrl + ":" + testAddr).GetZoneIds()
 }

@@ -28,6 +28,11 @@ type registry struct {
 	serverEngine *gin.Engine
 }
 
+func (r *registry) clear() {
+	r.lock.Lock()
+	defer r.lock.Unlock()
+	r.zones.Clear()
+}
 func (r *registry) getPeers(zone int) []peer {
 	r.lock.Lock()
 	defer r.lock.Unlock()
@@ -96,6 +101,7 @@ func (r *registry) allDetails() string {
 	t.AppendSeparator()
 	return t.Render()
 }
+
 func Setup() *registry {
 	reg := &registry{
 		lock:   sync.Mutex{},
@@ -104,4 +110,3 @@ func Setup() *registry {
 	}
 	return reg
 }
-

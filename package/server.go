@@ -20,6 +20,7 @@ const (
 	ZoneUrl     = "/zone"
 	DetailsUrl  = "/details"
 	ShutdownUrl = "/shutdown"
+	ResetUrl    = "/reset"
 )
 
 func newPeer(address string, zone int, meta MetaData) peer {
@@ -140,15 +141,23 @@ func (sh *serverHandler) runServer(addr string, ctx context.Context) {
 // close registry
 func (sh *serverHandler) shutdown(c *gin.Context) {
 	defer sh.stop()
-	c.Status(http.StatusOK)
+	c.String(http.StatusOK, "Ok")
 }
 
+// all details
 func (sh *serverHandler) details(c *gin.Context) {
 	c.String(http.StatusOK, sh.reg.allDetails())
 }
 
+// zone Ids
 func (sh *serverHandler) getZones(c *gin.Context) {
-	c.JSON(http.StatusOK, &gin.H{ "zoneIds" : sh.reg.zoneIds()})
+	c.JSON(http.StatusOK, &gin.H{"zoneIds": sh.reg.zoneIds()})
+}
+
+// reset everything
+func (sh *serverHandler) reset(c *gin.Context) {
+	sh.reg.clear()
+	c.String(http.StatusOK, "Ok")
 }
 
 // Server configures the http Server and handlers
@@ -170,7 +179,8 @@ func Server(addr string, reg *registry) {
 	sh.gin.Handle("GET", ZoneIdsUrl, sh.getZones)
 	// shutdown registry
 	sh.gin.Handle("GET", ShutdownUrl, sh.shutdown)
-
+	// shutdown registry
+	sh.gin.Handle("GET", ResetUrl, sh.reset)
 	// get list of peers for a zone
 	sh.gin.Handle("GET", ZoneUrl, sh.getZonePeers)
 	// add a peer to a zone, return list of peers for that zone

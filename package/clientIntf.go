@@ -48,7 +48,7 @@ func (r *registryClient) GetZoneIds() []int {
 		return nil
 	}
 	var rsp map[string][]int
-	if b := sendReq(req); b != nil{
+	if b := sendReq(req); b != nil {
 		err := json.Unmarshal(b, &rsp)
 		if err != nil {
 			return nil
