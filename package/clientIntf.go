@@ -59,7 +59,7 @@ func (r *registryClient) GetDetails() []string {
 	}
 	for _, peers := range rsp {
 		for _, peer := range peers {
-			addrs = append(addrs, peer.Address)
+			addrs = append(addrs, peer.MetaData.(string))
 		}
 	}
 	return addrs

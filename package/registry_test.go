@@ -49,7 +49,7 @@ func mockZone(zone int) testZone {
 	for i := 0; i < tClientsPerZone; i++ {
 		port := (zone * 10) + 9000 + i
 		addr := MockHostName + strconv.Itoa(port)
-		nw[addr] = newPeer(addr, zone, nil)
+		nw[addr] = newPeer(addr, zone, "some-udp-port")
 	}
 	return nw
 }
