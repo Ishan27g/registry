@@ -65,6 +65,9 @@ func mockClientRegister(zone int, address string, meta MetaData) PeerResponse {
 	//return RegistryClient(deployedUrl).Register(zone, address, meta)
 	return RegistryClient(testUrl+":"+testAddr).Register(zone, address, meta)
 }
+func mockClientGetDetails() []string {
+	return RegistryClient(testUrl + ":" + testAddr).GetDetails()
+}
 
 func TestRegistryClient(t *testing.T) {
 
@@ -108,6 +111,8 @@ func TestRegistryClient(t *testing.T) {
 	}
 	wg2.Wait()
 
+	assert.NotEmpty(t, mockClientGetDetails())
+
 	for zoneNum, responses := range check {
 		// DEBUG PRINTS
 		// str := fmt.Sprintf("\n============= Zone %d ============", zoneNum)
@@ -121,6 +126,6 @@ func TestRegistryClient(t *testing.T) {
 		assert.Equal(t, tClientsPerZone, len(responses))
 	}
 
-	fmt.Println(reg.allDetails())
-
+	fmt.Printf("\n%v\n", mockClientGetDetails()) // = reg.allDetails(true)
+	fmt.Println(reg.allDetails(false))
 }

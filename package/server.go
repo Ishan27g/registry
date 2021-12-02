@@ -15,12 +15,13 @@ import (
 )
 
 const (
-	RegUrl      = "/register"
-	ZoneIdsUrl  = "/zones"
-	ZoneUrl     = "/zone"
-	DetailsUrl  = "/details"
-	ShutdownUrl = "/shutdown"
-	ResetUrl    = "/reset"
+	RegUrl         = "/register"
+	ZoneIdsUrl     = "/zones"
+	ZoneUrl        = "/zone"
+	DetailsUrl     = "/details"
+	DetailsUrlJson = "/details/json"
+	ShutdownUrl    = "/shutdown"
+	ResetUrl       = "/reset"
 )
 
 func newPeer(address string, zone int, meta MetaData) peer {
@@ -146,7 +147,11 @@ func (sh *serverHandler) shutdown(c *gin.Context) {
 
 // all details
 func (sh *serverHandler) details(c *gin.Context) {
-	c.String(http.StatusOK, sh.reg.allDetails())
+	c.String(http.StatusOK, sh.reg.allDetails(false).(string))
+}
+
+func (sh *serverHandler) detailsJson(c *gin.Context) {
+	c.JSON(http.StatusOK, sh.reg.allDetails(true))
 }
 
 // zone Ids
@@ -175,6 +180,7 @@ func Server(addr string, reg *registry) {
 
 	// get full details
 	sh.gin.Handle("GET", DetailsUrl, sh.details)
+	sh.gin.Handle("GET", DetailsUrlJson, sh.detailsJson)
 	// get list of zone id
 	sh.gin.Handle("GET", ZoneIdsUrl, sh.getZones)
 	// shutdown registry

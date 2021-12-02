@@ -36,11 +36,34 @@ type RegistryClientI interface {
 	GetZoneIds() []int
 	// GetZonePeers returns the addresses of zone peers
 	GetZonePeers(zone int) PeerResponse
+	// all registered
+	GetDetails() []string
 }
 type registryClient struct {
 	serverAddress string
 }
 
+func (r *registryClient) GetDetails() []string {
+	url := r.serverAddress + DetailsUrlJson
+	req, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		return nil
+	}
+	var rsp map[int]peers
+	var addrs []string
+	if b := sendReq(req); b != nil {
+		err := json.Unmarshal(b, &rsp)
+		if err != nil {
+			return nil
+		}
+	}
+	for _, peers := range rsp {
+		for _, peer := range peers {
+			addrs = append(addrs, peer.Address)
+		}
+	}
+	return addrs
+}
 func (r *registryClient) GetZoneIds() []int {
 	url := r.serverAddress + ZoneIdsUrl
 	req, err := http.NewRequest("GET", url, nil)
