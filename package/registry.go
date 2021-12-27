@@ -87,13 +87,13 @@ func (r *registry) allDetails(tbl bool) interface{} {
 		//t.SetOutputMirror(os.Stdout)
 		t.SetStyle(table.StyleLight)
 		t.Style().Options.DrawBorder = false
-		t.AppendHeader(table.Row{"Zone", "Peer Address", "Registered At"})
+		t.AppendHeader(table.Row{"Zone", "Peer Address", "Registered At", "Meta"})
 
 		for it := r.zones.Iterator(); it.Next(); {
 			p := it.Value().(peers)
 			var logs []table.Row
 			for _, r := range p {
-				logs = append(logs, table.Row{r.Zone, r.Address, r.RegisterAt.String()})
+				logs = append(logs, table.Row{r.Zone, r.Address, r.RegisterAt.String(), r.MetaData})
 			}
 			t.AppendRows(logs)
 			t.AppendSeparator()

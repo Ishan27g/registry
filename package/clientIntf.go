@@ -21,10 +21,17 @@ type PeerResponse []RegisterRequest
 func (pr *PeerResponse) GetPeerAddr(exclude string) []string {
 	var p []string
 	for _, p2 := range *pr {
-		p = append(p, p2.Address)
 		if exclude != "" && strings.Contains(exclude, p2.Address) {
 			continue
 		}
+		p = append(p, p2.Address)
+	}
+	return p
+}
+func (pr *PeerResponse) GetPeerMeta() []MetaData {
+	var p []MetaData
+	for _, p2 := range *pr {
+		p = append(p, p2.MetaData)
 	}
 	return p
 }
@@ -36,7 +43,7 @@ type RegistryClientI interface {
 	GetZoneIds() []int
 	// GetZonePeers returns the addresses of zone peers
 	GetZonePeers(zone int) PeerResponse
-	// all registered
+	// GetDetails returns all registered peers details
 	GetDetails() []string
 }
 type registryClient struct {
