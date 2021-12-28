@@ -53,7 +53,7 @@ type registryClient struct {
 }
 
 func (r *registryClient) ping(address string) bool {
-	req, err := http.NewRequest("GET", address, nil)
+	req, err := http.NewRequest("GET", address+"/ping", nil)
 	if err != nil {
 		return false
 	}
