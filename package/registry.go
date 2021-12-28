@@ -2,6 +2,7 @@ package _package
 
 import (
 	"sync"
+	"time"
 
 	"github.com/Ishan27g/go-utils/mLogger"
 	"github.com/emirpasic/gods/trees/avltree"
@@ -43,20 +44,67 @@ func (r *registry) getPeers(zone int) []peer {
 	peerMap := peersI.(peers)
 	return peerMap.getPeers()
 }
+func (r *registry) getPeerMap(zone int) peers {
+	peersI, found := r.zones.Get(zone)
+	if found {
+		return peersI.(peers)
+	}
+	return nil
+}
 
+// removePeer removes peers from the map
+func (r *registry) removePeer(p peer) {
+	r.lock.Lock()
+	defer r.lock.Unlock()
+	if peerMap := r.getPeerMap(p.Zone); peerMap != nil {
+		peerMap[p.Address] = nil
+		delete(peerMap, p.Address)
+		if len(peerMap) == 0 {
+			r.zones.Remove(p.Zone)
+		} else {
+			r.zones.Put(p.Zone, peerMap)
+		}
+		r.logger.Debug("Removed inactive peer - " + p.Address)
+	}
+}
+
+// checkPeerExists returns true if peer is present in map
+func (r *registry) checkPeerExists(p peer) bool {
+	if peerMap := r.getPeerMap(p.Zone); peerMap != nil {
+		return peerMap[p.Address] != nil
+	}
+	return false
+}
+
+// monitorPeer periodically pings the peer, removing it if unreachable
+func (r *registry) monitorPeer(p peer) {
+	for {
+		<-time.After(5 * time.Second)
+		if !r.checkPeerExists(p) {
+			break // already deleted
+		}
+		if RegistryClient("").ping(p.Address) {
+			continue
+		}
+		<-time.After(2 * time.Second) // try again
+		if RegistryClient("").ping(p.Address) {
+			continue
+		}
+		r.removePeer(p)
+	}
+}
 func (r *registry) addPeer(p peer) bool {
 	r.lock.Lock()
 	defer r.lock.Unlock()
 	added := false
-	peersI, found := r.zones.Get(p.Zone)
-	if !found {
+	peerMap := r.getPeerMap(p.Zone)
+	if peerMap == nil {
 		ps := peers{
 			p.Address: &p,
 		}
 		r.zones.Put(p.Zone, ps)
 		added = true
 	} else {
-		peerMap := peersI.(peers)
 		if peerMap[p.Address] == nil { // new peer
 			peerMap[p.Address] = &p
 			added = true
@@ -67,6 +115,9 @@ func (r *registry) addPeer(p peer) bool {
 				added = true
 			}
 		}
+	}
+	if added {
+		go r.monitorPeer(p)
 	}
 	return added
 }
@@ -117,7 +168,7 @@ func Setup() *registry {
 	reg := &registry{
 		lock:   sync.Mutex{},
 		zones:  avltree.NewWithIntComparator(),
-		logger: mLogger.New("registry", "info"),
+		logger: mLogger.New("registry", "debug"),
 	}
 	return reg
 }

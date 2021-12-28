@@ -45,11 +45,26 @@ type RegistryClientI interface {
 	GetZonePeers(zone int) PeerResponse
 	// GetDetails returns all registered peers details
 	GetDetails() []string
+
+	ping(address string) bool
 }
 type registryClient struct {
 	serverAddress string
 }
 
+func (r *registryClient) ping(address string) bool {
+	req, err := http.NewRequest("GET", address, nil)
+	if err != nil {
+		return false
+	}
+	client := &http.Client{Timeout: time.Second * 3}
+
+	resp, err := client.Do(req)
+	if err != nil {
+		return false
+	}
+	return resp.StatusCode == http.StatusOK
+}
 func (r *registryClient) GetDetails() []string {
 	url := r.serverAddress + DetailsUrlJson
 	req, err := http.NewRequest("GET", url, nil)

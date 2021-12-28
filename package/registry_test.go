@@ -126,6 +126,11 @@ func TestRegistryClient(t *testing.T) {
 		assert.Equal(t, tClientsPerZone, len(responses))
 	}
 
-	fmt.Printf("\n%v\n", mockClientGetDetails()) // = reg.allDetails(true)
+	// fmt.Printf("\n%v\n", mockClientGetDetails()) // = reg.allDetails(true)
 	fmt.Println(reg.allDetails(false))
+
+	// all peers inactive
+	<-time.After(9 * time.Second)
+	assert.Empty(t, mockClientGetDetails())
+
 }

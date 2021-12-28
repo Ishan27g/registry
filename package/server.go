@@ -92,6 +92,8 @@ func (sh *serverHandler) registerPeer(c *gin.Context) {
 				MetaData:   p2.MetaData,
 			})
 		}
+		sh.logger.Debug("Registered - " + p.Address)
+		sh.logger.Debug("registerPeer - " + fmt.Sprintf("%v", r))
 		c.JSON(http.StatusAccepted, r)
 	} else {
 		c.AbortWithStatus(http.StatusExpectationFailed)
@@ -115,6 +117,7 @@ func (sh *serverHandler) getZonePeers(c *gin.Context) {
 			MetaData:   p2.MetaData,
 		})
 	}
+	sh.logger.Debug("getZonePeers - " + fmt.Sprintf("%v", rsp))
 	c.JSON(http.StatusAccepted, rsp)
 }
 
@@ -147,16 +150,22 @@ func (sh *serverHandler) shutdown(c *gin.Context) {
 
 // all details
 func (sh *serverHandler) details(c *gin.Context) {
-	c.String(http.StatusOK, sh.reg.allDetails(false).(string))
+	r := sh.reg.allDetails(false).(string)
+	sh.logger.Debug("details - " + fmt.Sprintf("%v", r))
+	c.String(http.StatusOK, r)
 }
 
 func (sh *serverHandler) detailsJson(c *gin.Context) {
-	c.JSON(http.StatusOK, sh.reg.allDetails(true))
+	r := sh.reg.allDetails(true)
+	sh.logger.Debug("detailsJson - " + fmt.Sprintf("%v", r))
+	c.JSON(http.StatusOK, r)
 }
 
 // zone Ids
 func (sh *serverHandler) getZones(c *gin.Context) {
-	c.JSON(http.StatusOK, &gin.H{"zoneIds": sh.reg.zoneIds()})
+	r := &gin.H{"zoneIds": sh.reg.zoneIds()}
+	sh.logger.Debug("detailsJson - " + fmt.Sprintf("%v", r))
+	c.JSON(http.StatusOK, r)
 }
 
 // reset everything
