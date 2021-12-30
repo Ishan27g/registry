@@ -3,7 +3,6 @@ module github.com/Ishan27gOrg/registry
 go 1.17
 
 require (
-	github.com/Ishan27g/go-utils/mLogger v0.0.0-20211124154642-ddf1831bec07 // indirect
 	github.com/Ishan27gOrg/registry/package v0.0.0
 	github.com/emirpasic/gods v1.12.0 // indirect
 	github.com/gin-gonic/gin v1.7.7 // indirect
@@ -11,6 +10,7 @@ require (
 )
 
 require (
+	github.com/Ishan27g/go-utils/mLogger v0.0.0-20211230135645-5a7e5725a982 // indirect
 	github.com/fatih/color v1.7.0 // indirect
 	github.com/gin-contrib/sse v0.1.0 // indirect
 	github.com/go-playground/locales v0.13.0 // indirect

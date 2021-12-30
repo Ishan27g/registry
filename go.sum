@@ -1,5 +1,6 @@
-github.com/Ishan27g/go-utils/mLogger v0.0.0-20211124154642-ddf1831bec07 h1:cFmWspQ+z5XkqkR4tIFLIBl/GJHABvuQv7AXW5u4fiQ=
 github.com/Ishan27g/go-utils/mLogger v0.0.0-20211124154642-ddf1831bec07/go.mod h1:WzVBX9gkyoU43yCXo9y3vwCRvahASWxlL8oV7vDTpT0=
+github.com/Ishan27g/go-utils/mLogger v0.0.0-20211230135645-5a7e5725a982 h1:ono2lSOfR9JN/VUEpz5LGYp+b/4oGUg33Mgj7Jyy/Jg=
+github.com/Ishan27g/go-utils/mLogger v0.0.0-20211230135645-5a7e5725a982/go.mod h1:WzVBX9gkyoU43yCXo9y3vwCRvahASWxlL8oV7vDTpT0=
 github.com/creack/pty v1.1.9/go.mod h1:oKZEueFk5CKHvIhNR5MUki03XCEU+Q6VDXinZuGJ33E=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=

@@ -165,10 +165,11 @@ func (r *registry) allDetails(tbl bool) interface{} {
 }
 
 func Setup() *registry {
+	mLogger.Apply(mLogger.Level(hclog.Trace), mLogger.Color(true))
 	reg := &registry{
 		lock:   sync.Mutex{},
 		zones:  avltree.NewWithIntComparator(),
-		logger: mLogger.New("registry", "debug"),
+		logger: mLogger.New("registry"),
 	}
 	return reg
 }
