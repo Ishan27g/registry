@@ -3,7 +3,7 @@ module github.com/Ishan27gOrg/registry/package
 go 1.17
 
 require (
-	github.com/Ishan27g/go-utils/mLogger v0.0.0-20211124154642-ddf1831bec07
+	github.com/Ishan27g/go-utils/mLogger v0.0.0-20211230135645-5a7e5725a982
 	github.com/emirpasic/gods v1.12.0
 	github.com/gin-gonic/gin v1.7.7
 	github.com/hashicorp/go-hclog v1.0.0
