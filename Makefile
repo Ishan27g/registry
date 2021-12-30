@@ -1,5 +1,5 @@
 test:
-	go mod tidy && go mod vendor && cd package && go test --v
+	cd package && go test --v
 clean:
 	rm registry
 build:
