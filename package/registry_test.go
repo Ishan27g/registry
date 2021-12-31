@@ -32,7 +32,7 @@ func mockRegistry() {
 		stopRegistry = make(chan bool)
 		ctx, cancel = context.WithCancel(context.Background())
 		reg = Setup()
-		go Server(testAddr, reg)
+		go Run(testAddr, reg)
 		go func() {
 			<-stopRegistry
 			cancel()

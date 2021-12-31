@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"net/http/httptest"
 	"strconv"
 	"time"
 
@@ -24,6 +25,15 @@ const (
 	ResetUrl       = "/reset"
 )
 
+var sh *serverHandler
+
+func ShutDown() {
+	if sh != nil {
+		w := httptest.NewRecorder()
+		c, _ := gin.CreateTestContext(w)
+		sh.shutdown(c)
+	}
+}
 func newPeer(address string, zone int, meta MetaData) peer {
 	return peer{
 		RegisterAt: time.Now().UTC(),
@@ -174,11 +184,11 @@ func (sh *serverHandler) reset(c *gin.Context) {
 	c.String(http.StatusOK, "Ok")
 }
 
-// Server configures the http Server and handlers
-func Server(addr string, reg *registry) {
+// Run configures the http Run and handlers
+func Run(addr string, reg *registry) {
 	gin.SetMode(gin.DebugMode)
 
-	sh := serverHandler{
+	sh = &serverHandler{
 		stop:   nil,
 		logger: mLogger.Get("http"),
 		gin:    gin.New(),

@@ -165,7 +165,7 @@ func (r *registry) allDetails(tbl bool) interface{} {
 }
 
 func Setup() *registry {
-	mLogger.Apply(mLogger.Level(hclog.Trace), mLogger.Color(true))
+	mLogger.Apply(mLogger.Level(hclog.Error), mLogger.Color(true))
 	reg := &registry{
 		lock:   sync.Mutex{},
 		zones:  avltree.NewWithIntComparator(),

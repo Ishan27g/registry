@@ -11,5 +11,5 @@ func main() {
 	if port == "" {
 		os.Exit(1)
 	}
-	p.Server(port, p.Setup())
+	p.Run(port, p.Setup())
 }
