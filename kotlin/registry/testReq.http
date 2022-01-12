@@ -1,0 +1,12 @@
+POST http://localhost:7000/register HTTP/1.1
+content-type: application/json
+
+{
+    "address": "http://localhost:1001",
+    "meta_data": {
+        "a" : "oj"
+    },
+    "registered_at": "22-12-2010",
+    "zone": 1
+}
+
