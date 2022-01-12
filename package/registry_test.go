@@ -21,7 +21,6 @@ const tClientsPerZone = 5
 const tZones = 6
 const MockHostName = "http://localhost:"
 
-var reg *registry
 var singleRegistry = sync.Once{}
 var ctx context.Context
 var cancel context.CancelFunc

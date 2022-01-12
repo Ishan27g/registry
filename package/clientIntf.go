@@ -11,7 +11,7 @@ import (
 )
 
 type RegisterRequest struct {
-	RegisterAt time.Time `json:"register_at"`
+	RegisterAt time.Time `json:"registered_at"`
 	Address    string    `json:"address"` // full Address `
 	Zone       int       `json:"zone"`    // todo
 	MetaData   MetaData  `json:"meta_data"`
@@ -53,7 +53,7 @@ type registryClient struct {
 }
 
 func (r *registryClient) ping(address string) bool {
-	req, err := http.NewRequest("GET", address+"/ping", nil)
+	req, err := http.NewRequest("GET", address+"/engine/ping", nil)
 	if err != nil {
 		return false
 	}
