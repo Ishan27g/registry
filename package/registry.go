@@ -11,6 +11,12 @@ import (
 	"github.com/jedib0t/go-pretty/v6/table"
 )
 
+func Clear() {
+	if reg != nil {
+		reg.clear()
+	}
+}
+
 type MetaData interface{}
 type peer RegisterRequest
 type peers map[string]*peer // peer-address : peer
@@ -164,9 +170,11 @@ func (r *registry) allDetails(tbl bool) interface{} {
 
 }
 
+var reg *registry
+
 func Setup() *registry {
 	mLogger.Apply(mLogger.Level(hclog.Error), mLogger.Color(true))
-	reg := &registry{
+	reg = &registry{
 		lock:   sync.Mutex{},
 		zones:  avltree.NewWithIntComparator(),
 		logger: mLogger.New("registry"),
