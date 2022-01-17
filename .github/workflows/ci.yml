@@ -8,7 +8,7 @@ on:
 
 jobs:
 
-  test:
+  test-golang:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -18,5 +18,17 @@ jobs:
       with:
         go-version: 1.17
 
-    - name: Test
-      run: make test
+    - name: Test golang
+      run: cd golang/registry && make test
+  
+  test-kotlin:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up JDK 17
+        uses: actions/setup-java@v2
+        with:
+          java-version: '17'
+          distribution: 'openjdk'
+      - name: Build with Maven
+        run: cd kotlin/registry && mvn verify clean
