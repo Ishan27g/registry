@@ -57,7 +57,7 @@ func (r *registryClient) ping(address string) bool {
 	if err != nil {
 		return false
 	}
-	client := &http.Client{Timeout: time.Second * 3}
+	client := &http.Client{Timeout: time.Second * 1}
 
 	resp, err := client.Do(req)
 	if err != nil {
@@ -115,6 +115,7 @@ func (r *registryClient) Register(zone int, address string, meta MetaData) PeerR
 
 func (r registryClient) GetZonePeers(zone int) PeerResponse {
 	url := r.serverAddress + ZoneUrl + "?id=" + strconv.Itoa(zone)
+	//url := r.serverAddress + ZoneUrl + "/" + strconv.Itoa(zone)
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
 		return nil
