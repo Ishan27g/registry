@@ -3,7 +3,7 @@ package main
 import (
 	"os"
 
-	p "github.com/Ishan27gOrg/registry/package"
+	p "github.com/Ishan27g/registry/golang/registry/package"
 )
 
 func main() {
