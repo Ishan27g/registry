@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"net/http"
 	"strconv"
 	"strings"
@@ -45,42 +46,76 @@ type RegistryClientI interface {
 	GetZonePeers(zone int) PeerResponse
 	// GetDetails returns all registered peers details
 	GetDetails() []string
-
-	ping(address string) bool
+	GetPingMeta() map[string]PingMeta
+	ping(address string) (bool, *PingMeta)
 }
 type registryClient struct {
 	serverAddress string
 }
 
-func (r *registryClient) ping(address string) bool {
+func (r *registryClient) ping(address string) (bool, *PingMeta) {
 	req, err := http.NewRequest("GET", address+"/engine/ping", nil)
 	if err != nil {
-		return false
+		return false, nil
 	}
 	client := &http.Client{Timeout: time.Second * 1}
 
 	resp, err := client.Do(req)
 	if err != nil {
-		return false
+		return false, nil
 	}
-	return resp.StatusCode == http.StatusOK
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		fmt.Println("ERROR reading body. " + err.Error())
+		return false, nil
+	}
+	defer resp.Body.Close()
+	var pr PingMeta
+	err = json.Unmarshal(body, &pr)
+	if err != nil {
+		fmt.Println("e" + err.Error())
+		return false, nil
+	}
+	return resp.StatusCode == http.StatusOK, &pr
 }
-func (r *registryClient) GetDetails() []string {
+
+func (r *registryClient) details() *map[int]details {
+	var rsp map[int]details
 	url := r.serverAddress + DetailsUrlJson
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
 		return nil
 	}
-	var rsp map[int]peers
-	var addrs []string
 	if b := sendReq(req); b != nil {
 		err := json.Unmarshal(b, &rsp)
 		if err != nil {
 			return nil
 		}
 	}
-	for _, peers := range rsp {
-		for _, peer := range peers {
+	return &rsp
+}
+func (r *registryClient) GetPingMeta() map[string]PingMeta {
+	var pm = make(map[string]PingMeta)
+	rsp := r.details()
+	if rsp == nil {
+		return nil
+	}
+	for _, peers := range *r.details() {
+		for s, meta := range peers.Pm {
+			pm[s] = meta
+		}
+	}
+	return pm
+}
+
+func (r *registryClient) GetDetails() []string {
+	rsp := r.details()
+	if rsp == nil {
+		return nil
+	}
+	var addrs []string
+	for _, peers := range *rsp {
+		for _, peer := range peers.Peers {
 			addrs = append(addrs, peer.MetaData.(string))
 		}
 	}

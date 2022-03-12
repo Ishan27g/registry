@@ -160,13 +160,13 @@ func (sh *serverHandler) shutdown(c *gin.Context) {
 
 // all details
 func (sh *serverHandler) details(c *gin.Context) {
-	r := sh.reg.allDetails(false).(string)
+	r, _ := sh.reg.allDetails(false)
 	sh.logger.Debug("details - " + fmt.Sprintf("%v", r))
-	c.String(http.StatusOK, r)
+	c.JSON(http.StatusOK, r)
 }
 
 func (sh *serverHandler) detailsJson(c *gin.Context) {
-	r := sh.reg.allDetails(true)
+	_, r := sh.reg.allDetails(true)
 	sh.logger.Debug("detailsJson - " + fmt.Sprintf("%v", r))
 	c.JSON(http.StatusOK, r)
 }
